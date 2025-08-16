@@ -15,7 +15,7 @@ function Auctions() {
   useEffect(() => {
     const getAuctions = async () => {
       try {
-        let res = await axios.get("http://localhost:8080/api/auctions", {
+        let res = await axios.get("/api/auctions", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",

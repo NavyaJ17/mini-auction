@@ -12,7 +12,7 @@ function Navbar() {
   async function handleClick() {
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/auth/logout",
+        "/api/auth/logout",
         {},
         { withCredentials: true }
       );

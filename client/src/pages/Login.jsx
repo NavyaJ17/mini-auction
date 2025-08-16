@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "/api/auth/login",
         {
           email: emailRef.current.value,
           password: passwordRef.current.value,

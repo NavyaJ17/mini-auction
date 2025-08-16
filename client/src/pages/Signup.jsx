@@ -16,7 +16,7 @@ function Signup() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        "http://localhost:8080/api/auth/register",
+        "/api/auth/register",
         {
           name: nameRef.current.value,
           email: emailRef.current.value,

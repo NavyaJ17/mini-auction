@@ -46,7 +46,7 @@ function AuctionRoom() {
   useEffect(() => {
     const getAuction = async () => {
       try {
-        let res = await axios.get(`http://localhost:8080/api/auctions/${id}`, {
+        let res = await axios.get(`/api/auctions/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ function AuctionRoom() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/bids/${id}`,
+        `/api/bids/${id}`,
         {
           amount: bidRef.current.value,
         },
@@ -180,7 +180,7 @@ function AuctionRoom() {
   const accept = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/seller/${id}/accept`,
+        `/api/seller/${id}/accept`,
         {},
         {
           headers: {
@@ -198,7 +198,7 @@ function AuctionRoom() {
   const reject = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/seller/${id}/reject`,
+        `/api/seller/${id}/reject`,
         {},
         {
           headers: {
@@ -217,7 +217,7 @@ function AuctionRoom() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/seller/${id}/counter`,
+        `/api/seller/${id}/counter`,
         { amount: counterRef.current.value },
         {
           headers: {
@@ -236,7 +236,7 @@ function AuctionRoom() {
   const counterAccept = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/seller/${id}/counter-accept`,
+        `/api/seller/${id}/counter-accept`,
         {},
         {
           headers: {
@@ -255,7 +255,7 @@ function AuctionRoom() {
   const counterReject = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8080/api/seller/${id}/counter-reject`,
+        `/api/seller/${id}/counter-reject`,
         {},
         {
           headers: {
