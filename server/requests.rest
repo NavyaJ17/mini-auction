@@ -1,0 +1,70 @@
+GET http://localhost:8080/api/auctions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3NTJkNGVjLWI1MGUtNDA0MS1iMjFhLTgzNGU3OGJjMmZkNSIsImlhdCI6MTc1NTI2OTAxMCwiZXhwIjoxNzU1MjY5OTEwfQ.U-oSXJGQG-43YvybbDSBMENLaA7ySAM7LA8-56-4TJE
+
+###
+POST http://localhost:8080/api/auctions/new
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3NTJkNGVjLWI1MGUtNDA0MS1iMjFhLTgzNGU3OGJjMmZkNSIsImlhdCI6MTc1NTI2OTAxMCwiZXhwIjoxNzU1MjY5OTEwfQ.U-oSXJGQG-43YvybbDSBMENLaA7ySAM7LA8-56-4TJE
+
+{
+    "itemName": "abc",
+    "description": "desc",
+    "startingPrice": 10,
+    "bidIncrement": 10,
+    "startTime": "2025-08-15 13:15:00",
+    "endTime": "2025-08-16 13:15:00"
+}
+
+###
+POST http://localhost:8080/api/bids/faf729ab-f425-424f-a748-b03f0b602275
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3NTJkNGVjLWI1MGUtNDA0MS1iMjFhLTgzNGU3OGJjMmZkNSIsImlhdCI6MTc1NTI1NTk2MywiZXhwIjoxNzU1MjU2ODYzfQ.oFZTgRJSw_CvLjME6b2mYUHXUGDsSM1HUdAmtUZuMAA
+
+{
+    "amount": 140
+}
+
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Tom",
+    "email": "tom@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "tom@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "navyajain170104@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/api/auth/refresh
+
+###
+POST http://localhost:8080/api/auth/logout
+
+###
+POST http://localhost:8080/api/auctions/faf729ab-f425-424f-a748-b03f0b602275/end
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFjZDA0YTA1LWI3MDMtNGUwNi05NDJlLTY5Mjg4MjE1ZjA5MCIsImlhdCI6MTc1NTI1NjI1NiwiZXhwIjoxNzU1MjU3MTU2fQ.kfAp4A42XGFNoWmXDc2SVSpbmthW_b0d7aM88yCXVNU
+
+###
+POST http://localhost:8080/api/seller/faf729ab-f425-424f-a748-b03f0b602275/accept
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFjZDA0YTA1LWI3MDMtNGUwNi05NDJlLTY5Mjg4MjE1ZjA5MCIsImlhdCI6MTc1NTI1NzgzNCwiZXhwIjoxNzU1MjU4NzM0fQ._bX6ULqiMvC0PFoH0o3-del1gKR8CYq1dCz3WHfdcxk
