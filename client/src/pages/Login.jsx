@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        "/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
           email: emailRef.current.value,
           password: passwordRef.current.value,

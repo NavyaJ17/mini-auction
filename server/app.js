@@ -12,12 +12,10 @@ import sellerDecisionRoutes from "./routes/sellerDecisionRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// console.log(path.join(__dirname, "../.env"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const __dir = path.dirname(__dirname);
 
-dotenv.config({ path: path.join(__dir, ".env") });
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -26,6 +24,7 @@ const io = new Server(server, {
     origin: "*",
     credentials: true,
   },
+  transports: ["websocket"],
 });
 
 app.use(
@@ -39,15 +38,20 @@ app.use(cookieParser());
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.auth.userId;
-  if (userId) socket.join(userId.toString());
-  console.log(`User ${userId} connected to personal room`);
+
+  if (userId) {
+    socket.join(userId);
+    console.log(`User ${userId} joined personal room`);
+  }
 
   socket.on("join_room", (auctionId) => {
     socket.join(auctionId);
     console.log(`User joined auction room: ${auctionId}`);
   });
+
   socket.on("leave_room", (auctionId) => {
-    socket.leave(`User left auction room: ${auctionId}`);
+    socket.leave(auctionId);
+    console.log(`User left auction room: ${auctionId}`);
   });
 });
 

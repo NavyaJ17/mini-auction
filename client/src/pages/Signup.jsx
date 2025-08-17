@@ -3,7 +3,7 @@ import React from "react";
 import { useRef } from "react";
 import { AppContext } from "../context/AppContext";
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Meta, useNavigate } from "react-router-dom";
 
 function Signup() {
   const nameRef = useRef();
@@ -16,7 +16,7 @@ function Signup() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        "/api/auth/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         {
           name: nameRef.current.value,
           email: emailRef.current.value,

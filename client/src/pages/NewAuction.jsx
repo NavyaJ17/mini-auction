@@ -21,7 +21,7 @@ function NewAuction() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        "/api/auctions/new",
+        `${import.meta.env.VITE_API_URL}/api/auctions/new`,
         {
           itemName: itemNameRef.current.value,
           description: descRef.current.value,

@@ -3,8 +3,9 @@ FROM node:18-alpine AS client-build
 
 WORKDIR /app/client
 COPY client/package*.json ./
+COPY client/.env .
 RUN npm install --legacy-peer-deps
-COPY client ./
+COPY client ./                   
 RUN npm run build
 
 # ---- BACKEND BUILD ----
@@ -23,10 +24,8 @@ ENV TZ=Asia/Kolkata
 
 WORKDIR /app/server
 
-# Copy backend
 COPY --from=server-build /app/server ./
 
-# Copy frontend build output to backend public folder
 COPY --from=client-build /app/client/dist ./public
 
 EXPOSE 8080

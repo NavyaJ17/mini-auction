@@ -7,6 +7,7 @@ import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import socket from "../socket.js";
 
 function Auctions() {
   const [auctions, setAuctions] = useState(null);
@@ -15,13 +16,16 @@ function Auctions() {
   useEffect(() => {
     const getAuctions = async () => {
       try {
-        let res = await axios.get("/api/auctions", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
+        let res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/auctions`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         setAuctions(res.data.auctions);
       } catch (error) {
         console.log(error);
@@ -35,34 +39,48 @@ function Auctions() {
   return (
     <>
       <Navbar />
-      <div className="mt-19 text-lg p-8 border border-gray-500 rounded-2xl">
-        <table>
-          <thead>
-            <tr className="border-b border-gray-500">
-              <th className="px-4 py-2">Auction ID</th>
-              <th className="px-4 py-2">Item Name</th>
-              <th className="px-4 py-2">Description</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {auctions &&
-              auctions.map((a) => (
-                <React.Fragment key={a.id}>
-                  <tr>
-                    <td className="px-4 py-2">{a.id}</td>
-                    <td className="px-4 py-2">{a.itemName}</td>
-                    <td className="px-4 py-2">{a.description}</td>
-                    <td className="px-4 py-2">{a.status}</td>
-                    <td className="px-4 py-2 text-blue-500 cursor-pointer underline">
-                      <Link to={`/auctions/${a.id}`}>Join</Link>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-          </tbody>
-        </table>
+      <div className="mt-19 flex justify-center items-center text-lg border border-gray-500 rounded-2xl overflow-scroll h-2/3">
+        <div className="h-full">
+          <table>
+            <thead>
+              <tr className="border-b border-gray-500">
+                <th className="px-4 py-2">Auction ID</th>
+                <th className="px-4 py-2">Item Name</th>
+                <th className="px-4 py-2">Description</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {auctions &&
+                auctions.map((a) => (
+                  <React.Fragment key={a.id}>
+                    <tr>
+                      <td className="px-4 py-2">{a.id}</td>
+                      <td className="px-4 py-2">{a.itemName}</td>
+                      <td className="px-4 py-2">{a.description}</td>
+                      <td className="px-4 py-2">
+                        <div
+                          className={`text-center text-xs uppercase font-semibold px-2 py-1 rounded-lg ${
+                            a.status === "active"
+                              ? "bg-green-200"
+                              : a.status === "ended"
+                              ? "bg-red-200"
+                              : "bg-yellow-200"
+                          }`}
+                        >
+                          {a.status}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 text-blue-500 cursor-pointer underline">
+                        <Link to={`/auctions/${a.id}`}>Join</Link>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

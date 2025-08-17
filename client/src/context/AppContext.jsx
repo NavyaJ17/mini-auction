@@ -14,7 +14,7 @@ export const AppContextProvider = (props) => {
     const refreshAccessToken = async () => {
       try {
         const res = await axios.post(
-          "/api/auth/refresh",
+          `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
           {},
           { withCredentials: true }
         );
@@ -25,7 +25,10 @@ export const AppContextProvider = (props) => {
         setIsLoggedIn(false);
         setUserData(null);
         setAccessToken(null);
-        toast.error(error.response.data.error);
+
+        if (error.response && error.response.status !== 401) {
+          toast.error(error.response.data?.error || "Something went wrong");
+        }
       } finally {
         setLoading(false);
       }

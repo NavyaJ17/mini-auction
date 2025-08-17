@@ -17,7 +17,7 @@ function AuctionRoom() {
   const [status, setStatus] = useState(null);
   const { userData, accessToken } = useContext(AppContext);
   const bidRef = useRef();
-  const [timeLeft, setTimeLeft] = useState(null);
+  const [timeLeft, setTimeLeft] = useState("00:00:00");
   const [decision, setDecision] = useState(null);
   const [counter, setCounter] = useState(null);
   const counterRef = useRef();
@@ -46,14 +46,16 @@ function AuctionRoom() {
   useEffect(() => {
     const getAuction = async () => {
       try {
-        let res = await axios.get(`/api/auctions/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
-        console.log(res.data);
+        let res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/auctions/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         const auctionData = res.data.auction;
         setAuction(auctionData);
         setHighestBid(auctionData.highestBid?.amount || null);
@@ -88,6 +90,8 @@ function AuctionRoom() {
   }, [id, highestBid, decision]);
 
   useEffect(() => {
+    // socket.auth = { userId: userData.id };
+    // socket.connect();
     socket.emit("join_room", id);
 
     socket.on("bid_update", (data) => {
@@ -133,11 +137,11 @@ function AuctionRoom() {
     });
 
     socket.on("counter_offer_accepted", (data) => {
-      toast.warn(`Your counter offer was accepted`);
+      toast.success(`Your counter offer was accepted`);
     });
 
     socket.on("counter_offer_rejected", (data) => {
-      toast.warn(`Your counter offer was rejected`);
+      toast.error(`Your counter offer was rejected`);
     });
 
     return () => {
@@ -159,7 +163,7 @@ function AuctionRoom() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        `/api/bids/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/bids/${id}`,
         {
           amount: bidRef.current.value,
         },
@@ -180,7 +184,7 @@ function AuctionRoom() {
   const accept = async () => {
     try {
       let res = await axios.post(
-        `/api/seller/${id}/accept`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${id}/accept`,
         {},
         {
           headers: {
@@ -198,7 +202,7 @@ function AuctionRoom() {
   const reject = async () => {
     try {
       let res = await axios.post(
-        `/api/seller/${id}/reject`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${id}/reject`,
         {},
         {
           headers: {
@@ -217,7 +221,7 @@ function AuctionRoom() {
     e.preventDefault();
     try {
       let res = await axios.post(
-        `/api/seller/${id}/counter`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${id}/counter`,
         { amount: counterRef.current.value },
         {
           headers: {
@@ -236,7 +240,7 @@ function AuctionRoom() {
   const counterAccept = async () => {
     try {
       let res = await axios.post(
-        `/api/seller/${id}/counter-accept`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${id}/counter-accept`,
         {},
         {
           headers: {
@@ -255,7 +259,7 @@ function AuctionRoom() {
   const counterReject = async () => {
     try {
       let res = await axios.post(
-        `/api/seller/${id}/counter-reject`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${id}/counter-reject`,
         {},
         {
           headers: {
@@ -274,20 +278,29 @@ function AuctionRoom() {
   return (
     <>
       <Navbar />
-      <div className="p-8 h-full w-full mt-19">
+      <div className="flex justify-center items-center h-full w-full mt-19 p-8">
         {auction && (
-          <div className="border border-gray-500 h-full w-full rounded-3xl p-8 flex flex-col gap-10">
-            <div className="relative flex flex-col justify-center items-center ">
-              <h1>
-                {status === "upcoming"
-                  ? "Auction starts in:"
-                  : "Auction ends in:"}
-              </h1>
-              <div className="flex justify-center items-center text-7xl font-bold relative">
-                {timeLeft && timeLeft}
+          <div className="border border-gray-500 h-full w-full overflow-scroll rounded-3xl p-8 flex flex-col gap-16">
+            <div className="relative flex items-end justify-between">
+              <div className="flex flex-col justify-center items-center">
+                <h1>
+                  {status === "upcoming"
+                    ? "Auction starts in:"
+                    : "Auction ends in:"}
+                </h1>
+                <div className="flex justify-center items-center text-7xl font-bold relative">
+                  {timeLeft && timeLeft}
+                </div>
+              </div>
+              <div className="flex flex-col justify-end items-end">
+                <h1>
+                  Starting Time: {new Date(auction.startTime).toUTCString()}
+                </h1>
+                <h1>Ending Time: {new Date(auction.endTime).toUTCString()}</h1>
+                <h1>Seller ID: {auction.sellerId}</h1>
               </div>
               <div
-                className={`absolute text-xs right-0 top-0 uppercase font-semibold px-2 py-1 rounded-lg ${
+                className={`absolute text-xs right-0 -top-2 uppercase font-semibold px-2 py-1 rounded-lg ${
                   status === "active"
                     ? "bg-green-200"
                     : status === "ended"
@@ -301,22 +314,22 @@ function AuctionRoom() {
             <div className="flex gap-8">
               <div className="flex flex-col gap-8 flex-2">
                 <div>
-                  <h1 className="text-xl">Auction Id:</h1>
+                  <h1>Auction Id:</h1>
                   <h1 className="text-3xl font-semibold">{auction.id}</h1>
                 </div>
                 <div>
-                  <h1 className="text-xl">Item Name:</h1>
+                  <h1>Item Name:</h1>
                   <h1 className="text-3xl font-semibold">{auction.itemName}</h1>
                 </div>
                 <div>
-                  <h1 className="text-xl">Description:</h1>
+                  <h1>Description:</h1>
                   <h1 className="text-3xl font-semibold">
                     {auction.description}
                   </h1>
                 </div>
               </div>
               <div className="flex flex-col gap-8 flex-1">
-                <div className="flex justify-between">
+                <div className="flex justify-center gap-10">
                   <div>
                     <h1 className="text-5xl font-bold">
                       ${highestBid && highestBid}

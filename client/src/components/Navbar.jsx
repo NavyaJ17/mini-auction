@@ -12,7 +12,7 @@ function Navbar() {
   async function handleClick() {
     try {
       const res = await axios.post(
-        "/api/auth/logout",
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
         {},
         { withCredentials: true }
       );
@@ -23,19 +23,25 @@ function Navbar() {
       toast.success("Logged out successfully.");
     } catch (error) {
       console.log(error);
-      //   toast.error(error.response.data.error);
+      toast.error(error.response.data.error);
     }
   }
 
   return (
-    <div className="fixed top-0 left-0 px-8 p-4 border-b border-gray-500 w-full flex items-center gap-2 text-lg font-semibold bg-white">
+    <div className="fixed top-0 left-0 px-8 p-4 border-b border-gray-500 w-full flex items-center gap-4 text-lg font-semibold bg-white">
       <div className="bg-gray-200 flex justify-center items-center px-4 py-2 text-lg font-bold rounded-full">
         {userData.name[0]}
       </div>
       <p className="flex-1">Hi, {userData.name}</p>
       <Link
+        to={"/auctions"}
+        className="hover:underline text-base py-1 rounded-lg cursor-pointer"
+      >
+        Auctions List
+      </Link>
+      <Link
         to={"/auctions/new"}
-        className="hover:underline px-3 py-1 rounded-lg cursor-pointer"
+        className="hover:underline text-base px-3 py-1 rounded-lg cursor-pointer"
       >
         New Auction
       </Link>
