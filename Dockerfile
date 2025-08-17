@@ -3,9 +3,10 @@ FROM node:18-alpine AS client-build
 
 WORKDIR /app/client
 COPY client/package*.json ./
-COPY client/.env .
 RUN npm install --legacy-peer-deps
-COPY client ./                   
+COPY client ./        
+ARG VITE_API_URL
+ENV VITE_API_URL="https://mini-auction-y1n3.onrender.com"
 RUN npm run build
 
 # ---- BACKEND BUILD ----
