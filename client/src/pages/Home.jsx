@@ -11,7 +11,7 @@ function Home() {
       <div className="flex flex-col justify-center items-center gap-8">
         <div className="flex flex-col items-center">
           <h1 className="text-5xl font-bold text-center">
-            Welcome to Min-Auction
+            Welcome to Mini Auction
           </h1>
           <p className="text-xl text-center w-120">
             A mini real-time auction platform where users can create and view

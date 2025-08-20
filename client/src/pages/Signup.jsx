@@ -3,7 +3,8 @@ import React from "react";
 import { useRef } from "react";
 import { AppContext } from "../context/AppContext";
 import { useContext } from "react";
-import { Link, Meta, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Signup() {
   const nameRef = useRef();
